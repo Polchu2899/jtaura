@@ -109,7 +109,6 @@ export function BackgroundPaths() {
             alt="José S. Taura - Consultor Empresarial"
             loading="eager"
             className="relative z-[1] w-44 object-contain"
-            style={{ background: "#080B12" }}
           />
         </div>
       </div>
@@ -124,7 +123,7 @@ export function BackgroundPaths() {
           alt="José S. Taura - Consultor Empresarial"
           loading="eager"
           className="relative z-[1] object-contain"
-          style={{ width: "clamp(260px,28vw,460px)", background: "#080B12" }}
+          style={{ width: "clamp(220px,24vw,400px)", maxHeight: "85vh" }}
         />
       </div>
 
@@ -132,49 +131,63 @@ export function BackgroundPaths() {
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12 pb-20 pt-6 md:pt-28
                       text-center md:text-left">
 
-        {/* Eyebrow */}
+        {/* Eyebrow — golden lines hidden on mobile to avoid awkward wrap */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.1 }}
           className="flex items-center justify-center md:justify-start gap-3 mb-8"
         >
-          <div className="h-px w-8" style={{ background: "linear-gradient(to right, transparent, #C9A84C)" }} />
-          <span className="text-[11px] tracking-[0.22em] uppercase font-medium" style={{ color: "#C9A84C" }}>
+          <div className="hidden md:block h-px w-8 shrink-0" style={{ background: "linear-gradient(to right, transparent, #C9A84C)" }} />
+          <span className="text-[11px] tracking-[0.2em] uppercase font-medium leading-relaxed" style={{ color: "#C9A84C" }}>
             Consultor · Auditor · Coach de Alto Rendimiento
           </span>
-          <div className="h-px w-8" style={{ background: "linear-gradient(to left, transparent, #C9A84C)" }} />
+          <div className="hidden md:block h-px w-8 shrink-0" style={{ background: "linear-gradient(to left, transparent, #C9A84C)" }} />
         </motion.div>
 
         {/* Heading */}
         <h1 className="mb-8 leading-none" style={{ fontFamily: "var(--font-playfair)" }}>
 
-          {/* Line 1 — per-character clip animation */}
+          {/* Line 1 — per-character clip animation, word-grouped to prevent mid-word line breaks */}
           <div
             className="block text-5xl sm:text-6xl md:text-7xl font-bold"
             style={{ color: "#F0EAD6" }}
           >
-            {headingLine1.split("").map((char, i) => (
-              /* Each character has its OWN overflow-hidden → clean clip without cutting siblings */
-              <span
-                key={i}
-                style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}
-              >
-                <motion.span
-                  style={{ display: "inline-block" }}
-                  initial={{ y: "100%" }}
-                  animate={{ y: "0%" }}
-                  transition={{
-                    delay: 0.15 + i * 0.024,
-                    type: "spring",
-                    stiffness: 150,
-                    damping: 25,
-                  }}
-                >
-                  {char === " " ? " " : char}
-                </motion.span>
-              </span>
-            ))}
+            {headingLine1.split(" ").map((word, wIdx) => {
+              /* count total chars before this word (including prior spaces) for consistent delay */
+              const charOffset = headingLine1
+                .split(" ")
+                .slice(0, wIdx)
+                .reduce((acc, w) => acc + w.length + 1, 0);
+              return (
+                <span key={wIdx} style={{ display: "inline" }}>
+                  {wIdx > 0 && " "}
+                  {/* inline-block + nowrap = word never breaks internally */}
+                  <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+                    {word.split("").map((char, cIdx) => (
+                      <span
+                        key={cIdx}
+                        style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}
+                      >
+                        <motion.span
+                          style={{ display: "inline-block" }}
+                          initial={{ y: "100%" }}
+                          animate={{ y: "0%" }}
+                          transition={{
+                            delay: 0.15 + (charOffset + cIdx) * 0.024,
+                            type: "spring",
+                            stiffness: 150,
+                            damping: 25,
+                          }}
+                        >
+                          {char}
+                        </motion.span>
+                      </span>
+                    ))}
+                  </span>
+                </span>
+              );
+            })}
           </div>
 
           {/* Line 2 — gold italic fade-up */}
@@ -246,7 +259,7 @@ export function BackgroundPaths() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.9 }}
-          className="flex flex-wrap items-center gap-8 justify-center md:justify-start"
+          className="flex flex-wrap items-center gap-x-8 gap-y-6 justify-center md:justify-start"
         >
           {metrics.map((m, idx) => (
             <div key={idx} className="flex items-center gap-8">
