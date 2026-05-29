@@ -3,6 +3,9 @@
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
+/* ── Deterministic timing — NO Math.random() to prevent SSR/client mismatch ── */
+const PATH_DURATIONS = Array.from({ length: 36 }, (_, i) => 20 + (i % 5) * 2); // 20,22,24,26,28,20...
+
 /* ── Animated gold paths ─────────────────────────────────── */
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -22,21 +25,20 @@ function FloatingPaths({ position }: { position: number }) {
     <div className="absolute inset-0 pointer-events-none">
       <svg className="w-full h-full" viewBox="0 0 696 316" fill="none">
         <title>Background Paths</title>
-        {paths.map((path) => (
+        {paths.map((path, i) => (
           <motion.path
             key={path.id}
             d={path.d}
             stroke={`rgba(232,201,107,${path.opacity})`}
             strokeWidth={path.width}
-            initial={{ pathLength: 0.3, opacity: 0.6 }}
+            initial={{ pathLength: 0.3, opacity: 0.3 }}
             animate={{
               pathLength: 1,
               opacity: [0.3, 0.6, 0.3],
-              pathOffset: [0, 1, 0],
             }}
             transition={{
-              duration: 20 + Math.random() * 10,
-              repeat: Number.POSITIVE_INFINITY,
+              duration: PATH_DURATIONS[i],
+              repeat: Infinity,
               ease: "linear",
             }}
           />
@@ -75,31 +77,21 @@ export function BackgroundPaths() {
   const headingLine2 = "Eleva tu vida.";
 
   const metrics = [
-    { target: 25, label: "Años de experiencia" },
-    { target: 400, label: "Clientes satisfechos" },
-    { target: 450, label: "Proyectos ejecutados" },
+    { target: 25,  label: "Años de experiencia"  },
+    { target: 400, label: "Clientes satisfechos"  },
+    { target: 450, label: "Proyectos ejecutados"  },
   ];
 
   return (
     <section
-      className="relative min-h-screen w-full flex items-center overflow-hidden"
+      className="relative min-h-screen w-full overflow-hidden"
       style={{ background: "#080B12" }}
     >
       {/* Ambient orbs */}
-      <div
-        className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(201,168,76,0.07) 0%, rgba(201,168,76,0.02) 50%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(201,168,76,0.05) 0%, rgba(201,168,76,0.01) 50%, transparent 70%)",
-        }}
-      />
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none"
+           style={{ background: "radial-gradient(circle, rgba(201,168,76,0.07) 0%, rgba(201,168,76,0.02) 50%, transparent 70%)" }} />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+           style={{ background: "radial-gradient(circle, rgba(201,168,76,0.05) 0%, rgba(201,168,76,0.01) 50%, transparent 70%)" }} />
 
       {/* Animated gold paths */}
       <div className="absolute inset-0">
@@ -107,89 +99,83 @@ export function BackgroundPaths() {
         <FloatingPaths position={-1} />
       </div>
 
-      {/* Consultant photo — desktop only */}
-      <div
-        className="absolute bottom-0 z-[1] pointer-events-none select-none hidden md:block"
-        style={{ right: "clamp(1rem, 4vw, 3rem)" }}
-      >
-        <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full"
-          style={{
-            width: "300px",
-            height: "clamp(80px,15vw,140px)",
-            background: "rgba(201,168,76,0.10)",
-            filter: "blur(40px)",
-          }}
-        />
+      {/* ── PHOTO MOBILE — in flow, centered above content ── */}
+      <div className="relative md:hidden flex justify-center pt-24 pb-2 pointer-events-none select-none z-[1]">
+        <div className="relative">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-36 rounded-full"
+               style={{ height: "48px", background: "rgba(201,168,76,0.12)", filter: "blur(20px)" }} />
+          <img
+            src="https://i.ibb.co/B2gKRg0b/Universal-Upscaler-0462b481-74cd-469c-879b-e569f5dbebda-removebg-preview.png"
+            alt="José S. Taura - Consultor Empresarial"
+            loading="eager"
+            className="relative z-[1] w-44 object-contain"
+            style={{ background: "#080B12" }}
+          />
+        </div>
+      </div>
+
+      {/* ── PHOTO DESKTOP — absolute bottom-right ── */}
+      <div className="hidden md:block absolute bottom-0 z-[1] pointer-events-none select-none"
+           style={{ right: "clamp(1rem, 4vw, 3rem)" }}>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full"
+             style={{ width: "300px", height: "clamp(80px,15vw,140px)", background: "rgba(201,168,76,0.10)", filter: "blur(40px)" }} />
         <img
           src="https://i.ibb.co/B2gKRg0b/Universal-Upscaler-0462b481-74cd-469c-879b-e569f5dbebda-removebg-preview.png"
           alt="José S. Taura - Consultor Empresarial"
           loading="eager"
           className="relative z-[1] object-contain"
-          style={{
-            width: "clamp(260px,28vw,460px)",
-            background: "#080B12",
-          }}
+          style={{ width: "clamp(260px,28vw,460px)", background: "#080B12" }}
         />
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12 pt-28 pb-20">
+      {/* ── Main content ── */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12 pb-20 pt-6 md:pt-28
+                      text-center md:text-left">
 
         {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.1 }}
-          className="flex items-center gap-3 mb-8"
+          className="flex items-center justify-center md:justify-start gap-3 mb-8"
         >
-          <div
-            className="h-px w-8"
-            style={{
-              background: "linear-gradient(to right, transparent, #C9A84C)",
-            }}
-          />
-          <span
-            className="text-[11px] tracking-[0.22em] uppercase font-medium"
-            style={{ color: "#C9A84C" }}
-          >
+          <div className="h-px w-8" style={{ background: "linear-gradient(to right, transparent, #C9A84C)" }} />
+          <span className="text-[11px] tracking-[0.22em] uppercase font-medium" style={{ color: "#C9A84C" }}>
             Consultor · Auditor · Coach de Alto Rendimiento
           </span>
-          <div
-            className="h-px w-8"
-            style={{
-              background: "linear-gradient(to left, transparent, #C9A84C)",
-            }}
-          />
+          <div className="h-px w-8" style={{ background: "linear-gradient(to left, transparent, #C9A84C)" }} />
         </motion.div>
 
         {/* Heading */}
-        <h1
-          className="mb-8 leading-none"
-          style={{ fontFamily: "var(--font-playfair)" }}
-        >
-          {/* Line 1 — animated letter by letter */}
-          <span
-            className="block text-5xl sm:text-6xl md:text-7xl font-bold overflow-hidden"
+        <h1 className="mb-8 leading-none" style={{ fontFamily: "var(--font-playfair)" }}>
+
+          {/* Line 1 — per-character clip animation */}
+          <div
+            className="block text-5xl sm:text-6xl md:text-7xl font-bold"
             style={{ color: "#F0EAD6" }}
           >
-            {headingLine1.split("").map((letter, i) => (
-              <motion.span
+            {headingLine1.split("").map((char, i) => (
+              /* Each character has its OWN overflow-hidden → clean clip without cutting siblings */
+              <span
                 key={i}
-                initial={{ y: "110%" }}
-                animate={{ y: "0%" }}
-                transition={{
-                  delay: 0.15 + i * 0.024,
-                  type: "spring",
-                  stiffness: 150,
-                  damping: 25,
-                }}
-                className="inline-block"
+                style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}
               >
-                {letter === " " ? " " : letter}
-              </motion.span>
+                <motion.span
+                  style={{ display: "inline-block" }}
+                  initial={{ y: "100%" }}
+                  animate={{ y: "0%" }}
+                  transition={{
+                    delay: 0.15 + i * 0.024,
+                    type: "spring",
+                    stiffness: 150,
+                    damping: 25,
+                  }}
+                >
+                  {char === " " ? " " : char}
+                </motion.span>
+              </span>
             ))}
-          </span>
+          </div>
 
           {/* Line 2 — gold italic fade-up */}
           <motion.span
@@ -198,8 +184,7 @@ export function BackgroundPaths() {
             transition={{ duration: 0.65, delay: 0.55, ease: [0.33, 1, 0.68, 1] }}
             className="block text-5xl sm:text-6xl md:text-7xl font-bold italic mt-1"
             style={{
-              background:
-                "linear-gradient(90deg, #C9A84C 0%, #E8C96B 50%, #F5D990 100%)",
+              background: "linear-gradient(90deg, #C9A84C 0%, #E8C96B 50%, #F5D990 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -214,7 +199,7 @@ export function BackgroundPaths() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.7 }}
-          className="text-base md:text-lg mb-10 max-w-md leading-relaxed"
+          className="text-base md:text-lg mb-10 max-w-md mx-auto md:mx-0 leading-relaxed"
           style={{ color: "rgba(240,234,214,0.65)" }}
         >
           Más de{" "}
@@ -229,7 +214,7 @@ export function BackgroundPaths() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.8 }}
-          className="flex flex-wrap gap-4 mb-16"
+          className="flex flex-wrap gap-4 mb-16 justify-center md:justify-start"
         >
           <a
             href="https://api.whatsapp.com/send?phone=34609625573&text=Hola%20José%2C%20quiero%20agendar%20mi%20primera%20llamada%20gratuita%20de%2030%20minutos"
@@ -243,23 +228,14 @@ export function BackgroundPaths() {
             }}
           >
             <span>Agenda tu llamada gratuita</span>
-            <svg
-              className="w-4 h-4 shrink-0"
-              viewBox="0 0 20 20"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
+            <svg className="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M4 10h12M10 4l6 6-6 6" />
             </svg>
           </a>
           <a
             href="#servicios"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-medium text-sm tracking-wide border transition-all duration-300 hover:-translate-y-0.5"
-            style={{
-              borderColor: "rgba(201,168,76,0.28)",
-              color: "rgba(240,234,214,0.75)",
-            }}
+            style={{ borderColor: "rgba(201,168,76,0.28)", color: "rgba(240,234,214,0.75)" }}
           >
             Ver servicios
           </a>
@@ -270,15 +246,12 @@ export function BackgroundPaths() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.9 }}
-          className="flex flex-wrap items-center gap-8"
+          className="flex flex-wrap items-center gap-8 justify-center md:justify-start"
         >
           {metrics.map((m, idx) => (
             <div key={idx} className="flex items-center gap-8">
               {idx > 0 && (
-                <div
-                  className="hidden sm:block w-px self-stretch"
-                  style={{ background: "rgba(201,168,76,0.25)" }}
-                />
+                <div className="hidden sm:block w-px self-stretch" style={{ background: "rgba(201,168,76,0.25)" }} />
               )}
               <div>
                 <div
@@ -291,13 +264,9 @@ export function BackgroundPaths() {
                     fontFamily: "var(--font-inter)",
                   }}
                 >
-                  <Counter target={m.target} />
-                  <span>+</span>
+                  <Counter target={m.target} /><span>+</span>
                 </div>
-                <div
-                  className="text-xs mt-1 tracking-wide"
-                  style={{ color: "rgba(240,234,214,0.45)" }}
-                >
+                <div className="text-xs mt-1 tracking-wide" style={{ color: "rgba(240,234,214,0.45)" }}>
                   {m.label}
                 </div>
               </div>
@@ -313,10 +282,8 @@ export function BackgroundPaths() {
         transition={{ delay: 1.4, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
       >
-        <div
-          className="w-5 h-8 rounded-full border flex items-start justify-center pt-1.5"
-          style={{ borderColor: "rgba(201,168,76,0.3)" }}
-        >
+        <div className="w-5 h-8 rounded-full border flex items-start justify-center pt-1.5"
+             style={{ borderColor: "rgba(201,168,76,0.3)" }}>
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -324,10 +291,7 @@ export function BackgroundPaths() {
             style={{ background: "rgba(201,168,76,0.6)" }}
           />
         </div>
-        <span
-          className="text-[10px] tracking-[0.22em] uppercase"
-          style={{ color: "rgba(201,168,76,0.45)" }}
-        >
+        <span className="text-[10px] tracking-[0.22em] uppercase" style={{ color: "rgba(201,168,76,0.45)" }}>
           Scroll
         </span>
       </motion.div>
