@@ -31,11 +31,12 @@ function FloatingPaths({ position }: { position: number }) {
             d={path.d}
             stroke={`rgba(232,201,107,${path.opacity})`}
             strokeWidth={path.width}
-            initial={{ pathLength: 0.3, opacity: 0.3 }}
-            animate={{
-              pathLength: 1,
-              opacity: [0.3, 0.6, 0.3],
-            }}
+            /* pathLength removed — it caused an instant jump from 1→0.3 at each repeat
+               (repeatType:"loop" default), making all 36 paths flash simultaneously.
+               Pure opacity breathing: [0.4,1,0.4] starts and ends at same value
+               → seamless loop, zero flicker. Varying durations create natural phase offsets. */
+            initial={{ opacity: 0.4 }}
+            animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{
               duration: PATH_DURATIONS[i],
               repeat: Infinity,
@@ -102,8 +103,9 @@ export function BackgroundPaths() {
       {/* ── PHOTO MOBILE — in flow, centered above content ── */}
       <div className="relative md:hidden flex justify-center pt-24 pb-2 pointer-events-none select-none z-[1]">
         <div className="relative">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-36 rounded-full"
-               style={{ height: "48px", background: "rgba(201,168,76,0.12)", filter: "blur(20px)" }} />
+          {/* radial-gradient glow — avoids filter:blur GPU layer that conflicts with SVG animation */}
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2"
+               style={{ width: "180px", height: "60px", background: "radial-gradient(ellipse, rgba(201,168,76,0.22) 0%, transparent 70%)" }} />
           <img
             src="https://i.ibb.co/B2gKRg0b/Universal-Upscaler-0462b481-74cd-469c-879b-e569f5dbebda-removebg-preview.png"
             alt="José S. Taura - Consultor Empresarial"
@@ -116,8 +118,9 @@ export function BackgroundPaths() {
       {/* ── PHOTO DESKTOP — absolute bottom-right ── */}
       <div className="hidden md:block absolute bottom-0 z-[1] pointer-events-none select-none"
            style={{ right: "clamp(1rem, 4vw, 3rem)" }}>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full"
-             style={{ width: "300px", height: "clamp(80px,15vw,140px)", background: "rgba(201,168,76,0.10)", filter: "blur(40px)" }} />
+        {/* radial-gradient glow — avoids filter:blur GPU layer */}
+        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2"
+             style={{ width: "420px", height: "130px", background: "radial-gradient(ellipse, rgba(201,168,76,0.16) 0%, transparent 70%)" }} />
         <img
           src="https://i.ibb.co/B2gKRg0b/Universal-Upscaler-0462b481-74cd-469c-879b-e569f5dbebda-removebg-preview.png"
           alt="José S. Taura - Consultor Empresarial"
