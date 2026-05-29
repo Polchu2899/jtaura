@@ -1,132 +1,336 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
+/* ── Animated gold paths ─────────────────────────────────── */
 function FloatingPaths({ position }: { position: number }) {
-    const paths = Array.from({ length: 36 }, (_, i) => ({
-        id: i,
-        d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
-            380 - i * 5 * position
-        } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${
-            152 - i * 5 * position
-        } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
-            684 - i * 5 * position
-        } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-        color: `rgba(15,23,42,${0.1 + i * 0.03})`,
-        width: 0.5 + i * 0.03,
-    }));
+  const paths = Array.from({ length: 36 }, (_, i) => ({
+    id: i,
+    d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
+      380 - i * 5 * position
+    } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${
+      152 - i * 5 * position
+    } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
+      684 - i * 5 * position
+    } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
+    opacity: 0.06 + i * 0.016,
+    width: 0.5 + i * 0.03,
+  }));
 
-    return (
-        <div className="absolute inset-0 pointer-events-none">
-            <svg
-                className="w-full h-full text-slate-950 dark:text-white"
-                viewBox="0 0 696 316"
-                fill="none"
-            >
-                <title>Background Paths</title>
-                {paths.map((path) => (
-                    <motion.path
-                        key={path.id}
-                        d={path.d}
-                        stroke="currentColor"
-                        strokeWidth={path.width}
-                        strokeOpacity={0.1 + path.id * 0.03}
-                        initial={{ pathLength: 0.3, opacity: 0.6 }}
-                        animate={{
-                            pathLength: 1,
-                            opacity: [0.3, 0.6, 0.3],
-                            pathOffset: [0, 1, 0],
-                        }}
-                        transition={{
-                            duration: 20 + Math.random() * 10,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "linear",
-                        }}
-                    />
-                ))}
-            </svg>
-        </div>
-    );
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      <svg className="w-full h-full" viewBox="0 0 696 316" fill="none">
+        <title>Background Paths</title>
+        {paths.map((path) => (
+          <motion.path
+            key={path.id}
+            d={path.d}
+            stroke={`rgba(232,201,107,${path.opacity})`}
+            strokeWidth={path.width}
+            initial={{ pathLength: 0.3, opacity: 0.6 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0.3, 0.6, 0.3],
+              pathOffset: [0, 1, 0],
+            }}
+            transition={{
+              duration: 20 + Math.random() * 10,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
 }
 
-export function BackgroundPaths({
-    title = "Background Paths",
-}: {
-    title?: string;
-}) {
-    const words = title.split(" ");
+/* ── Animated counter ────────────────────────────────────── */
+function Counter({ target }: { target: number }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -80px 0px" });
 
-    return (
-        <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950">
-            <div className="absolute inset-0">
-                <FloatingPaths position={1} />
-                <FloatingPaths position={-1} />
-            </div>
+  useEffect(() => {
+    if (!inView) return;
+    const duration = 1800;
+    const start = performance.now();
+    const tick = (ts: number) => {
+      const p = Math.min((ts - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      setCount(Math.floor(ease * target));
+      if (p < 1) requestAnimationFrame(tick);
+      else setCount(target);
+    };
+    requestAnimationFrame(tick);
+  }, [inView, target]);
 
-            <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 2 }}
-                    className="max-w-4xl mx-auto"
+  return <span ref={ref}>{count}</span>;
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+export function BackgroundPaths() {
+  const headingLine1 = "Transforma tu empresa.";
+  const headingLine2 = "Eleva tu vida.";
+
+  const metrics = [
+    { target: 25, label: "Años de experiencia" },
+    { target: 400, label: "Clientes satisfechos" },
+    { target: 450, label: "Proyectos ejecutados" },
+  ];
+
+  return (
+    <section
+      className="relative min-h-screen w-full flex items-center overflow-hidden"
+      style={{ background: "#080B12" }}
+    >
+      {/* Ambient orbs */}
+      <div
+        className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(201,168,76,0.07) 0%, rgba(201,168,76,0.02) 50%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(201,168,76,0.05) 0%, rgba(201,168,76,0.01) 50%, transparent 70%)",
+        }}
+      />
+
+      {/* Animated gold paths */}
+      <div className="absolute inset-0">
+        <FloatingPaths position={1} />
+        <FloatingPaths position={-1} />
+      </div>
+
+      {/* Consultant photo — desktop only */}
+      <div
+        className="absolute bottom-0 z-[1] pointer-events-none select-none hidden md:block"
+        style={{ right: "clamp(1rem, 4vw, 3rem)" }}
+      >
+        <div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full"
+          style={{
+            width: "300px",
+            height: "clamp(80px,15vw,140px)",
+            background: "rgba(201,168,76,0.10)",
+            filter: "blur(40px)",
+          }}
+        />
+        <img
+          src="https://i.ibb.co/B2gKRg0b/Universal-Upscaler-0462b481-74cd-469c-879b-e569f5dbebda-removebg-preview.png"
+          alt="José S. Taura - Consultor Empresarial"
+          loading="eager"
+          className="relative z-[1] object-contain"
+          style={{
+            width: "clamp(260px,28vw,460px)",
+            background: "#080B12",
+          }}
+        />
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12 pt-28 pb-20">
+
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.1 }}
+          className="flex items-center gap-3 mb-8"
+        >
+          <div
+            className="h-px w-8"
+            style={{
+              background: "linear-gradient(to right, transparent, #C9A84C)",
+            }}
+          />
+          <span
+            className="text-[11px] tracking-[0.22em] uppercase font-medium"
+            style={{ color: "#C9A84C" }}
+          >
+            Consultor · Auditor · Coach de Alto Rendimiento
+          </span>
+          <div
+            className="h-px w-8"
+            style={{
+              background: "linear-gradient(to left, transparent, #C9A84C)",
+            }}
+          />
+        </motion.div>
+
+        {/* Heading */}
+        <h1
+          className="mb-8 leading-none"
+          style={{ fontFamily: "var(--font-playfair)" }}
+        >
+          {/* Line 1 — animated letter by letter */}
+          <span
+            className="block text-5xl sm:text-6xl md:text-7xl font-bold overflow-hidden"
+            style={{ color: "#F0EAD6" }}
+          >
+            {headingLine1.split("").map((letter, i) => (
+              <motion.span
+                key={i}
+                initial={{ y: "110%" }}
+                animate={{ y: "0%" }}
+                transition={{
+                  delay: 0.15 + i * 0.024,
+                  type: "spring",
+                  stiffness: 150,
+                  damping: 25,
+                }}
+                className="inline-block"
+              >
+                {letter === " " ? " " : letter}
+              </motion.span>
+            ))}
+          </span>
+
+          {/* Line 2 — gold italic fade-up */}
+          <motion.span
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.55, ease: [0.33, 1, 0.68, 1] }}
+            className="block text-5xl sm:text-6xl md:text-7xl font-bold italic mt-1"
+            style={{
+              background:
+                "linear-gradient(90deg, #C9A84C 0%, #E8C96B 50%, #F5D990 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            {headingLine2}
+          </motion.span>
+        </h1>
+
+        {/* Sub */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.7 }}
+          className="text-base md:text-lg mb-10 max-w-md leading-relaxed"
+          style={{ color: "rgba(240,234,214,0.65)" }}
+        >
+          Más de{" "}
+          <strong style={{ color: "#E8C96B" }}>25 años</strong>{" "}
+          transformando empresas en Islas Baleares y Península.
+          <br />
+          Metodologías probadas. Resultados que se miden.
+        </motion.p>
+
+        {/* Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.8 }}
+          className="flex flex-wrap gap-4 mb-16"
+        >
+          <a
+            href="https://api.whatsapp.com/send?phone=34609625573&text=Hola%20José%2C%20quiero%20agendar%20mi%20primera%20llamada%20gratuita%20de%2030%20minutos"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full font-semibold text-sm tracking-wide transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
+            style={{
+              background: "linear-gradient(135deg, #C9A84C 0%, #E8C96B 100%)",
+              color: "#080B12",
+              boxShadow: "0 4px 24px rgba(201,168,76,0.35)",
+            }}
+          >
+            <span>Agenda tu llamada gratuita</span>
+            <svg
+              className="w-4 h-4 shrink-0"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M4 10h12M10 4l6 6-6 6" />
+            </svg>
+          </a>
+          <a
+            href="#servicios"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-medium text-sm tracking-wide border transition-all duration-300 hover:-translate-y-0.5"
+            style={{
+              borderColor: "rgba(201,168,76,0.28)",
+              color: "rgba(240,234,214,0.75)",
+            }}
+          >
+            Ver servicios
+          </a>
+        </motion.div>
+
+        {/* Metrics */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.9 }}
+          className="flex flex-wrap items-center gap-8"
+        >
+          {metrics.map((m, idx) => (
+            <div key={idx} className="flex items-center gap-8">
+              {idx > 0 && (
+                <div
+                  className="hidden sm:block w-px self-stretch"
+                  style={{ background: "rgba(201,168,76,0.25)" }}
+                />
+              )}
+              <div>
+                <div
+                  className="text-3xl font-bold tabular-nums leading-none"
+                  style={{
+                    background: "linear-gradient(90deg, #C9A84C, #E8C96B)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    fontFamily: "var(--font-inter)",
+                  }}
                 >
-                    <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter">
-                        {words.map((word, wordIndex) => (
-                            <span
-                                key={wordIndex}
-                                className="inline-block mr-4 last:mr-0"
-                            >
-                                {word.split("").map((letter, letterIndex) => (
-                                    <motion.span
-                                        key={`${wordIndex}-${letterIndex}`}
-                                        initial={{ y: 100, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{
-                                            delay:
-                                                wordIndex * 0.1 +
-                                                letterIndex * 0.03,
-                                            type: "spring",
-                                            stiffness: 150,
-                                            damping: 25,
-                                        }}
-                                        className="inline-block text-transparent bg-clip-text
-                                        bg-gradient-to-r from-neutral-900 to-neutral-700/80
-                                        dark:from-white dark:to-white/80"
-                                    >
-                                        {letter}
-                                    </motion.span>
-                                ))}
-                            </span>
-                        ))}
-                    </h1>
-
-                    <div
-                        className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10
-                        dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg
-                        overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-                    >
-                        <Button
-                            variant="ghost"
-                            className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
-                            bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100
-                            text-black dark:text-white transition-all duration-300
-                            group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
-                            hover:shadow-md dark:hover:shadow-neutral-800/50"
-                        >
-                            <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                                Discover Excellence
-                            </span>
-                            <span
-                                className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5
-                                transition-all duration-300"
-                            >
-                                →
-                            </span>
-                        </Button>
-                    </div>
-                </motion.div>
+                  <Counter target={m.target} />
+                  <span>+</span>
+                </div>
+                <div
+                  className="text-xs mt-1 tracking-wide"
+                  style={{ color: "rgba(240,234,214,0.45)" }}
+                >
+                  {m.label}
+                </div>
+              </div>
             </div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Scroll hint */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+      >
+        <div
+          className="w-5 h-8 rounded-full border flex items-start justify-center pt-1.5"
+          style={{ borderColor: "rgba(201,168,76,0.3)" }}
+        >
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-1 h-1.5 rounded-full"
+            style={{ background: "rgba(201,168,76,0.6)" }}
+          />
         </div>
-    );
+        <span
+          className="text-[10px] tracking-[0.22em] uppercase"
+          style={{ color: "rgba(201,168,76,0.45)" }}
+        >
+          Scroll
+        </span>
+      </motion.div>
+    </section>
+  );
 }
