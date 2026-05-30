@@ -155,7 +155,7 @@ export function BackgroundPaths() {
 
             {/* Eyebrow */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.1 }}
               style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", marginBottom: "2rem" }}
@@ -202,7 +202,7 @@ export function BackgroundPaths() {
 
               {/* Line 2 — gold italic */}
               <motion.span
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, delay: 0.55, ease: [0.33, 1, 0.68, 1] }}
                 className="text-5xl sm:text-6xl md:text-7xl font-bold italic"
@@ -221,7 +221,7 @@ export function BackgroundPaths() {
 
             {/* Sub-paragraph */}
             <motion.p
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.7 }}
               className="text-base md:text-lg"
@@ -236,7 +236,7 @@ export function BackgroundPaths() {
 
             {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.8 }}
               style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "4rem", justifyContent: "center" }}
@@ -278,7 +278,7 @@ export function BackgroundPaths() {
 
             {/* Metrics */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.9 }}
               style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2rem", justifyContent: "center" }}
@@ -334,9 +334,9 @@ export function BackgroundPaths() {
 
         {/* Scroll hint */}
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
           style={{
             position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)",
             display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
