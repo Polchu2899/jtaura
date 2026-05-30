@@ -2,6 +2,18 @@
    JOSÉ S. TAURA · Premium 2026
    ═══════════════════════════════════════════════════════ */
 
+/* ── Hero section responsive layout (background-paths) ── */
+.bp-mobile-photo  { display:flex; justify-content:center; padding-top:96px; padding-bottom:16px; }
+.bp-desktop-photo { display:none; }
+.bp-row           { display:flex; flex-direction:column; flex:1; padding-bottom:80px; }
+.bp-text          { flex:1; padding-top:24px; text-align:center; }
+@media (min-width:768px) {
+  .bp-mobile-photo  { display:none; }
+  .bp-desktop-photo { display:flex; align-items:flex-end; flex-shrink:0; }
+  .bp-row           { flex-direction:row; align-items:flex-end; }
+  .bp-text          { padding-top:112px; text-align:left; }
+}
+
 /* ── CSS PROPERTIES (animatable) ────────────────────── */
 @property --angle {
   syntax: '<angle>';

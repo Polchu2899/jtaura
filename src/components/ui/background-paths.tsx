@@ -33,7 +33,7 @@ function FloatingPaths({ position }: { position: number }) {
             d={path.d}
             stroke={`rgba(232,201,107,${path.opacity})`}
             strokeWidth={path.width}
-            /* opacity [0.4→1→0.4] starts and ends at same value = seamless loop, no jump flicker */
+            /* opacity [0.4→1→0.4] — same start/end value = seamless loop, no jump */
             initial={{ opacity: 0.4 }}
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: PATH_DURATIONS[i], repeat: Infinity, ease: "linear" }}
@@ -75,6 +75,8 @@ export function BackgroundPaths() {
     { target: 450, label: "Proyectos ejecutados" },
   ];
 
+  const ease = [0.33, 1, 0.68, 1] as const;
+
   return (
     <section
       style={{
@@ -85,31 +87,13 @@ export function BackgroundPaths() {
         background: "#080B12",
       }}
     >
-      {/* ── CSS for responsive photo layout ──────────────────
-           Using <style> with explicit media queries avoids
-           any potential Tailwind class-generation issues     */}
-      <style>{`
-        .bp-mobile-photo  { display: flex; justify-content: center; padding-top: 96px; padding-bottom: 16px; }
-        .bp-desktop-photo { display: none; }
-        .bp-row           { display: flex; flex-direction: column; flex: 1; padding-bottom: 80px; }
-        .bp-text          { flex: 1; padding-top: 24px; text-align: center; }
-        @media (min-width: 768px) {
-          .bp-mobile-photo  { display: none; }
-          .bp-desktop-photo { display: flex; align-items: flex-end; flex-shrink: 0; }
-          .bp-row           { flex-direction: row; align-items: flex-end; }
-          .bp-text          { padding-top: 112px; text-align: left; }
-        }
-      `}</style>
-
-      {/* ── BACKGROUND (first in DOM = naturally behind content) ── */}
+      {/* ── BACKGROUND ── */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-        {/* Top-left ambient orb */}
         <div style={{
           position: "absolute", top: 0, left: 0,
           width: 600, height: 600, borderRadius: "50%",
           background: "radial-gradient(circle, rgba(201,168,76,0.07) 0%, rgba(201,168,76,0.02) 50%, transparent 70%)",
         }} />
-        {/* Bottom-right ambient orb */}
         <div style={{
           position: "absolute", bottom: 0, right: 0,
           width: 500, height: 500, borderRadius: "50%",
@@ -119,7 +103,7 @@ export function BackgroundPaths() {
         <FloatingPaths position={-1} />
       </div>
 
-      {/* ── CONTENT (after background in DOM = naturally on top) ── */}
+      {/* ── CONTENT ── */}
       <div style={{
         position: "relative",
         minHeight: "100vh",
@@ -130,13 +114,13 @@ export function BackgroundPaths() {
         padding: "0 clamp(1.5rem, 5vw, 3rem)",
       }}>
 
-        {/* flex row: text-col + desktop-photo */}
+        {/* flex row: text-col + desktop-photo — layout managed by taura.css .bp-* classes */}
         <div className="bp-row">
 
           {/* ── TEXT COLUMN ── */}
           <div className="bp-text">
 
-            {/* Mobile photo — inside text col, shown at top on mobile */}
+            {/* Mobile photo */}
             <div className="bp-mobile-photo">
               <div style={{ position: "relative" }}>
                 <div style={{
@@ -157,8 +141,8 @@ export function BackgroundPaths() {
             <motion.div
               initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.1 }}
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", marginBottom: "2rem" }}
+              transition={{ duration: 0.55, delay: 0.1, ease }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", marginBottom: "1.5rem" }}
               className="md:justify-start"
             >
               <div className="hidden md:block" style={{ height: 1, width: 32, flexShrink: 0, background: "linear-gradient(to right, transparent, #C9A84C)" }} />
@@ -169,46 +153,28 @@ export function BackgroundPaths() {
             </motion.div>
 
             {/* Heading */}
-            <h1 style={{ marginBottom: "2rem", lineHeight: 1, fontFamily: "var(--font-playfair)" }}>
+            <h1 style={{ marginBottom: "1.5rem", lineHeight: 1.08, fontFamily: "var(--font-playfair)" }}>
 
-              {/* Line 1 — per-word grouping prevents mid-word line breaks */}
-              <div
+              {/* Line 1 — block slide-up (visible in SSR, no per-char clipping) */}
+              <motion.div
                 className="text-5xl sm:text-6xl md:text-7xl font-bold"
-                style={{ display: "block", color: "#F0EAD6" }}
+                style={{ display: "block", color: "#F0EAD6", whiteSpace: "normal" }}
+                initial={{ y: 24 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease }}
               >
-                {headingLine1.split(" ").map((word, wIdx) => {
-                  const offset = headingLine1.split(" ").slice(0, wIdx).reduce((a, w) => a + w.length + 1, 0);
-                  return (
-                    <span key={wIdx} style={{ display: "inline" }}>
-                      {wIdx > 0 && " "}
-                      <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
-                        {word.split("").map((char, cIdx) => (
-                          <span key={cIdx} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}>
-                            <motion.span
-                              style={{ display: "inline-block" }}
-                              initial={{ y: "100%" }}
-                              animate={{ y: "0%" }}
-                              transition={{ delay: 0.15 + (offset + cIdx) * 0.024, type: "spring", stiffness: 150, damping: 25 }}
-                            >
-                              {char}
-                            </motion.span>
-                          </span>
-                        ))}
-                      </span>
-                    </span>
-                  );
-                })}
-              </div>
+                {headingLine1}
+              </motion.div>
 
               {/* Line 2 — gold italic */}
               <motion.span
                 initial={{ y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.55, ease: [0.33, 1, 0.68, 1] }}
+                transition={{ duration: 0.7, delay: 0.35, ease }}
                 className="text-5xl sm:text-6xl md:text-7xl font-bold italic"
                 style={{
                   display: "block",
-                  marginTop: "0.25rem",
+                  marginTop: "0.15rem",
                   background: "linear-gradient(90deg, #C9A84C 0%, #E8C96B 50%, #F5D990 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -223,9 +189,9 @@ export function BackgroundPaths() {
             <motion.p
               initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.7 }}
+              transition={{ duration: 0.55, delay: 0.5, ease }}
               className="text-base md:text-lg"
-              style={{ marginBottom: "2.5rem", maxWidth: "28rem", margin: "0 auto 2.5rem", lineHeight: 1.625, color: "rgba(240,234,214,0.65)" }}
+              style={{ maxWidth: "28rem", margin: "0 auto 2rem", lineHeight: 1.65, color: "rgba(240,234,214,0.65)" }}
             >
               Más de{" "}
               <strong style={{ color: "#E8C96B" }}>25 años</strong>{" "}
@@ -238,8 +204,8 @@ export function BackgroundPaths() {
             <motion.div
               initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.8 }}
-              style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "4rem", justifyContent: "center" }}
+              transition={{ duration: 0.55, delay: 0.65, ease }}
+              style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "2.5rem", justifyContent: "center" }}
               className="md:justify-start"
             >
               <a
@@ -280,14 +246,14 @@ export function BackgroundPaths() {
             <motion.div
               initial={{ y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.9 }}
+              transition={{ duration: 0.55, delay: 0.78, ease }}
               style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2rem", justifyContent: "center" }}
               className="md:justify-start"
             >
               {metrics.map((m, idx) => (
                 <div key={idx} style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
                   {idx > 0 && (
-                    <div className="sm:block" style={{ width: 1, alignSelf: "stretch", background: "rgba(201,168,76,0.25)", display: "none" }} />
+                    <div style={{ width: 1, alignSelf: "stretch", background: "rgba(201,168,76,0.25)" }} />
                   )}
                   <div>
                     <div
@@ -310,22 +276,22 @@ export function BackgroundPaths() {
 
           </div>{/* end .bp-text */}
 
-          {/* ── DESKTOP PHOTO COLUMN ─────────────────────────── */}
+          {/* ── DESKTOP PHOTO COLUMN ── */}
           <div
             className="bp-desktop-photo"
-            style={{ width: "clamp(220px, 28vw, 420px)" }}
+            style={{ width: "clamp(220px, 28vw, 400px)" }}
           >
             <div style={{ position: "relative" }}>
               <div style={{
                 position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)",
-                width: 420, height: 130,
+                width: 380, height: 120,
                 background: "radial-gradient(ellipse, rgba(201,168,76,0.16) 0%, transparent 70%)",
               }} />
               <img
                 src={PHOTO}
                 alt="José S. Taura - Consultor Empresarial"
                 loading="eager"
-                style={{ position: "relative", display: "block", width: "100%", objectFit: "contain", maxHeight: "85vh" }}
+                style={{ position: "relative", display: "block", width: "100%", objectFit: "contain", maxHeight: "80vh" }}
               />
             </div>
           </div>
