@@ -1016,7 +1016,7 @@ a.event-card { cursor: pointer; }
   box-shadow: 0 8px 36px rgba(37,211,102,0.55);
 }
 @media (max-width: 600px) {
-  .wa-float { bottom: 1.25rem; right: 1.25rem; width: 52px; height: 52px; }
+  .wa-float { bottom: 4.5rem; right: 1.25rem; width: 52px; height: 52px; }
 }
 
 /* ── COOKIE BANNER ──────────────────────────────────── */

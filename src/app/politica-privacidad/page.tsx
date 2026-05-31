@@ -175,7 +175,7 @@ export default function PoliticaPrivacidad() {
 
         <div className="legal-footer-note">
           <a href="/jtaura/" className="legal-back">← Volver a inicio</a>
-          <p>© 2025 José S. Taura · Luxury Investment And Projects Island Territory, S.L.</p>
+          <p>© 2026 José S. Taura · Luxury Investment And Projects Island Territory, S.L.</p>
           <p>Diseñado y desarrollado por <a href="https://lucasyleodigital.com" target="_blank" rel="noopener noreferrer">Lucas y Leo Digital</a></p>
         </div>
 

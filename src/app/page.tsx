@@ -582,7 +582,7 @@ export default function Home() {
               <li><a href="#eventos">Eventos</a></li>
               <li><a href="/jtaura/politica-privacidad/">Aviso Legal & Privacidad</a></li>
             </ul>
-            <p className="footer-copy">© 2025 José S. Taura · Todos los derechos reservados</p>
+            <p className="footer-copy">© 2026 José S. Taura · Todos los derechos reservados</p>
           </div>
           <div className="footer-credit">
             Diseñado y desarrollado por{" "}
