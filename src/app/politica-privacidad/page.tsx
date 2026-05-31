@@ -12,7 +12,7 @@ export default function PoliticaPrivacidad() {
       <div className="legal-container">
 
         {/* Nav back */}
-        <a href="/" className="legal-back">← Volver a inicio</a>
+        <a href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/`} className="legal-back">← Volver a inicio</a>
 
         <h1 className="legal-main-title">Aviso Legal, Política de Privacidad y Cookies</h1>
         <p className="legal-updated">Última actualización: junio 2025</p>
@@ -174,7 +174,7 @@ export default function PoliticaPrivacidad() {
         </section>
 
         <div className="legal-footer-note">
-          <a href="/" className="legal-back">← Volver a inicio</a>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/`} className="legal-back">← Volver a inicio</a>
           <p>© 2026 José S. Taura · Luxury Investment And Projects Island Territory, S.L.</p>
           <p>Diseñado y desarrollado por <a href="https://lucasyleodigital.com" target="_blank" rel="noopener noreferrer">Lucas y Leo Digital</a></p>
         </div>

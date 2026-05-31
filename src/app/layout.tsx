@@ -82,7 +82,7 @@ export default function RootLayout({
           src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"
           strategy="afterInteractive"
         />
-        <Script src="/js/main.js" strategy="afterInteractive" />
+        <Script src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/js/main.js`} strategy="afterInteractive" />
       </body>
     </html>
   );
