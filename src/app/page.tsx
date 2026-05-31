@@ -6,7 +6,7 @@
 const BADGE      = "https://i.ibb.co/JWFYxWRW/Foto-de-Perfil-Tj-Taura-removebg-preview.png";
 const JOSE_AVION = "https://i.ibb.co/4g90GWCp/Jose-avion.jpg";
 const JOSE_CUT1  = "https://i.ibb.co/B2gKRg0b/Universal-Upscaler-0462b481-74cd-469c-879b-e569f5dbebda-removebg-preview.png";
-const JOSE_CUT2  = "https://i.ibb.co/TqWfLbjn/Universal-Upscaler-0d85729c-db5e-4eea-8351-a3ac3699e796-removebg-preview.png";
+const JOSE_CUT2  = "https://i.ibb.co/JFBV8XgB/Perfil.png";
 const LUXINPRO   = "https://i.ibb.co/nMPVkq0f/Logo-Luxinpro.png";
 const WA_BASE    = "https://api.whatsapp.com/send?phone=34609625573&text=";
 
