@@ -465,7 +465,20 @@ section { position: relative; }
 }
 .cta-inner { position: relative; z-index: 2; }
 @media (max-width: 768px) {
-  .cta-jose-photo { display: none; }
+  .cta-jose-photo {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    width: clamp(140px, 50vw, 220px);
+    margin: 0 auto 2rem;
+    display: block;
+    opacity: 0.9;
+  }
+  #cta-final .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 /* ── PROBLEM SECTION ────────────────────────────────── */
