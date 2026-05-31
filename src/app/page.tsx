@@ -124,7 +124,7 @@ export default function Home() {
         <p className="cookie-text">
           Utilizamos cookies propias y de terceros para analizar el tráfico y mejorar tu experiencia.
           Puedes aceptar todas o solo las necesarias.{" "}
-          <a href="/jtaura/politica-privacidad/" className="cookie-link">Más información</a>
+          <a href="/politica-privacidad/" className="cookie-link">Más información</a>
         </p>
         <div className="cookie-actions">
           <button id="cookie-accept" className="cookie-btn cookie-btn--accept">Aceptar todas</button>
@@ -580,7 +580,7 @@ export default function Home() {
               <li><a href="#about">José Taura</a></li>
               <li><a href="#testimonials">Testimonios</a></li>
               <li><a href="#eventos">Eventos</a></li>
-              <li><a href="/jtaura/politica-privacidad/">Aviso Legal & Privacidad</a></li>
+              <li><a href="/politica-privacidad/">Aviso Legal & Privacidad</a></li>
             </ul>
             <p className="footer-copy">© 2026 José S. Taura · Todos los derechos reservados</p>
           </div>

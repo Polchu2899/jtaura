@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "export",
   distDir: "docs",
-  basePath: "/jtaura",
+  /* basePath removed — site serves from domain root (tjtaura.com/) */
   images: {
     unoptimized: true,
   },
