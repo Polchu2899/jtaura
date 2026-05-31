@@ -749,12 +749,13 @@ section { position: relative; }
   filter: brightness(0.9) saturate(0.8);
 }
 .brand-text-logo {
-  font-family: var(--font-heading);
-  font-size: var(--text-xl);
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 500;
   color: var(--color-primary);
   margin-bottom: 1rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
