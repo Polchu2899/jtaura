@@ -151,15 +151,15 @@ function init() {
   var aboutText = document.querySelector('#about .about-text');
   if (aboutText) {
     gsap.from(Array.from(aboutText.children), {
-      opacity: 0, y: 40, stagger: 0.12, duration: 0.9, ease: 'power2.out',
+      opacity: 0, y: 30, stagger: 0.1, duration: 0.8, ease: 'power2.out',
       immediateRender: false,
-      scrollTrigger: { trigger: '#about', start: 'top 80%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: '#about', start: 'top bottom', toggleActions: 'play none none none' }
     });
   }
   gsap.from('.about-badge', {
     opacity: 0, scale: 0.8, duration: 0.8, ease: 'back.out(1.7)',
     immediateRender: false,
-    scrollTrigger: { trigger: '#about', start: 'top 75%', toggleActions: 'play none none reverse' }
+    scrollTrigger: { trigger: '#about', start: 'top bottom', toggleActions: 'play none none none' }
   });
 
   /* ── AUDIENCE ─────────────────────────────────────── */
@@ -205,8 +205,40 @@ function init() {
     });
   }
 
-  /* Refresh all triggers — fires any that should have triggered at current scroll position */
+  /* Refresh all triggers */
   ScrollTrigger.refresh();
+
+  /* ── COOKIE BANNER ────────────────────────────────── */
+  var cookieBanner = document.getElementById('cookie-banner');
+  var cookieAccept = document.getElementById('cookie-accept');
+  var cookieReject = document.getElementById('cookie-reject');
+
+  function hideCookieBanner() {
+    if (cookieBanner) {
+      cookieBanner.style.transform = 'translateY(100%)';
+      setTimeout(function() { cookieBanner.style.display = 'none'; }, 400);
+    }
+  }
+
+  if (cookieBanner && !localStorage.getItem('tjtaura_cookies')) {
+    setTimeout(function() {
+      cookieBanner.style.display = 'flex';
+      setTimeout(function() { cookieBanner.classList.add('visible'); }, 50);
+    }, 1200);
+  }
+
+  if (cookieAccept) {
+    cookieAccept.addEventListener('click', function() {
+      localStorage.setItem('tjtaura_cookies', 'accepted');
+      hideCookieBanner();
+    });
+  }
+  if (cookieReject) {
+    cookieReject.addEventListener('click', function() {
+      localStorage.setItem('tjtaura_cookies', 'rejected');
+      hideCookieBanner();
+    });
+  }
 
   /* ── MAGNETIC BUTTONS ─────────────────────────────── */
   document.querySelectorAll('.magnetic').forEach(function(btn) {
