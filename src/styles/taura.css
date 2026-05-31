@@ -738,10 +738,12 @@ section { position: relative; }
 .brand-text-logo {
   font-family: var(--font-heading);
   font-size: var(--text-xl);
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-primary);
   margin-bottom: 1rem;
   letter-spacing: 0.05em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .brand-desc {
   font-size: var(--text-xs);
