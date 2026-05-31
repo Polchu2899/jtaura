@@ -114,7 +114,8 @@ function init() {
   if (problemText) {
     gsap.from(Array.from(problemText.children), {
       opacity: 0, y: 40, stagger: 0.15, duration: 0.9, ease: 'power2.out',
-      scrollTrigger: { trigger: '#problem', start: 'top 70%', toggleActions: 'play none none reverse' }
+      immediateRender: false,
+      scrollTrigger: { trigger: '#problem', start: 'top 80%', toggleActions: 'play none none reverse' }
     });
   }
 
@@ -151,24 +152,42 @@ function init() {
   if (aboutText) {
     gsap.from(Array.from(aboutText.children), {
       opacity: 0, y: 40, stagger: 0.12, duration: 0.9, ease: 'power2.out',
-      scrollTrigger: { trigger: '#about', start: 'top 65%', toggleActions: 'play none none reverse' }
+      immediateRender: false,
+      scrollTrigger: { trigger: '#about', start: 'top 80%', toggleActions: 'play none none reverse' }
     });
   }
   gsap.from('.about-badge', {
     opacity: 0, scale: 0.8, duration: 0.8, ease: 'back.out(1.7)',
-    scrollTrigger: { trigger: '#about', start: 'top 60%', toggleActions: 'play none none reverse' }
+    immediateRender: false,
+    scrollTrigger: { trigger: '#about', start: 'top 75%', toggleActions: 'play none none reverse' }
   });
 
   /* ── AUDIENCE ─────────────────────────────────────── */
   gsap.from('.audience-card', {
     opacity: 0, y: 50, stagger: 0.1, duration: 0.8, ease: 'power2.out',
-    scrollTrigger: { trigger: '#audience', start: 'top 65%', toggleActions: 'play none none reverse' }
+    immediateRender: false,
+    scrollTrigger: { trigger: '#audience', start: 'top 80%', toggleActions: 'play none none reverse' }
+  });
+
+  /* ── BRANDS ───────────────────────────────────────── */
+  gsap.from('.brand-card', {
+    opacity: 0, y: 30, stagger: 0.12, duration: 0.8, ease: 'power2.out',
+    immediateRender: false,
+    scrollTrigger: { trigger: '#brands', start: 'top 80%', toggleActions: 'play none none reverse' }
+  });
+
+  /* ── EVENTS ───────────────────────────────────────── */
+  gsap.from('.event-card', {
+    opacity: 0, y: 40, stagger: 0.12, duration: 0.8, ease: 'power2.out',
+    immediateRender: false,
+    scrollTrigger: { trigger: '#eventos', start: 'top 80%', toggleActions: 'play none none reverse' }
   });
 
   /* ── TESTIMONIALS ─────────────────────────────────── */
   gsap.from('.testimonial-card', {
     opacity: 0, y: 50, stagger: 0.15, duration: 0.8, ease: 'power2.out',
-    scrollTrigger: { trigger: '#testimonials', start: 'top 65%', toggleActions: 'play none none reverse' }
+    immediateRender: false,
+    scrollTrigger: { trigger: '#testimonials', start: 'top 80%', toggleActions: 'play none none reverse' }
   });
 
   /* ── CTA FINAL ────────────────────────────────────── */
@@ -181,9 +200,13 @@ function init() {
   if (ctaInner) {
     gsap.from(Array.from(ctaInner.children), {
       opacity: 0, y: 40, stagger: 0.15, duration: 0.9, ease: 'power2.out',
-      scrollTrigger: { trigger: '#cta-final', start: 'top 65%', toggleActions: 'play none none reverse' }
+      immediateRender: false,
+      scrollTrigger: { trigger: '#cta-final', start: 'top 80%', toggleActions: 'play none none reverse' }
     });
   }
+
+  /* Refresh all triggers — fires any that should have triggered at current scroll position */
+  ScrollTrigger.refresh();
 
   /* ── MAGNETIC BUTTONS ─────────────────────────────── */
   document.querySelectorAll('.magnetic').forEach(function(btn) {

@@ -3,9 +3,12 @@
    Server Component — all interactivity via public/js/main.js
    ───────────────────────────────────────────────────────────── */
 
-const BADGE = "https://i.ibb.co/JWFYxWRW/Foto-de-Perfil-Tj-Taura-removebg-preview.png";
+const BADGE      = "https://i.ibb.co/JWFYxWRW/Foto-de-Perfil-Tj-Taura-removebg-preview.png";
 const JOSE_AVION = "https://i.ibb.co/4g90GWCp/Jose-avion.jpg";
-const WA_BASE = "https://api.whatsapp.com/send?phone=34609625573&text=";
+const JOSE_CUT1  = "https://i.ibb.co/B2gKRg0b/Universal-Upscaler-0462b481-74cd-469c-879b-e569f5dbebda-removebg-preview.png";
+const JOSE_CUT2  = "https://i.ibb.co/TqWfLbjn/Universal-Upscaler-0d85729c-db5e-4eea-8351-a3ac3699e796-removebg-preview.png";
+const LUXINPRO   = "https://i.ibb.co/nMPVkq0f/Logo-Luxinpro.png";
+const WA_BASE    = "https://api.whatsapp.com/send?phone=34609625573&text=";
 
 const schema = {
   "@context": "https://schema.org",
@@ -150,13 +153,14 @@ export default function Home() {
           <div className="container">
             <div className="problem-inner">
 
-              {/* Image */}
+              {/* Image — transparent-bg photo of José */}
               <div className="problem-img-wrap img-clip-wrap" id="problem-img">
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80&fm=webp"
-                  alt="Empresario reflexionando sobre el crecimiento de su negocio"
+                  src={JOSE_CUT2}
+                  alt="José S. Taura, experto en consultoría empresarial"
                   loading="lazy"
                   width={800} height={1000}
+                  style={{ objectFit: "contain", background: "transparent" }}
                 />
                 <div className="problem-img-overlay" />
               </div>
@@ -317,16 +321,20 @@ export default function Home() {
           <div className="container">
             <div className="about-inner">
 
-              {/* Image — foto real de José en avión */}
+              {/* Image column */}
               <div style={{ position: "relative" }}>
                 <div className="about-accent-line" />
                 <div className="about-img-wrap img-clip-wrap" id="about-img">
                   <img
                     src={JOSE_AVION}
-                    alt="José S. Taura, Consultor Empresarial y Coach de Alto Rendimiento"
+                    alt="José S. Taura, Consultor Empresarial"
                     loading="lazy"
                     width={800} height={1067}
                   />
+                </div>
+                {/* Floating secondary photo */}
+                <div className="about-float-photo">
+                  <img src={JOSE_CUT1} alt="José S. Taura" loading="lazy" />
                 </div>
                 <div className="about-badge">
                   <div className="about-badge-num">25+</div>
@@ -334,7 +342,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Text */}
+              {/* Text column */}
               <div className="about-text">
                 <div className="section-label">El experto</div>
                 <h2 className="about-title" id="about-title">Conoce a José Taura</h2>
@@ -343,20 +351,31 @@ export default function Home() {
                 </p>
                 <p className="about-bio">
                   Con más de 25 años de experiencia, José Taura ha recorrido un camino excepcional en el
-                  mundo empresarial, comenzando desde la base hasta liderar equipos de más de 150 empleados
-                  y colaborar con grandes marcas como{" "}
-                  <strong style={{ color: "var(--color-text)" }}>Meliá Hotels</strong>.
+                  mundo empresarial, comenzando desde la base hasta liderar equipos de más de{" "}
+                  <strong style={{ color: "var(--color-text)" }}>150 empleados</strong> y colaborar con
+                  grandes marcas como{" "}
+                  <strong style={{ color: "var(--color-text)" }}>Meliá Hotels International</strong>.
                 </p>
                 <p className="about-bio">
-                  Su trayectoria lo ha convertido en un experto en la optimización de negocios,
-                  reestructuración organizativa y mejora de procesos para autónomos y pymes, especialmente
-                  en el sector de la construcción, instalaciones y hotelería.
+                  Desde sus inicios en el sector, José ascendió de peón a encargado en solo tres años.
+                  Tras liderar proyectos en múltiples ciudades y superar la crisis de 2008, fundó{" "}
+                  <strong style={{ color: "var(--color-text)" }}>J.S.T. Instalaciones</strong>, ejecutando
+                  más de 450 viviendas simultáneamente. Posteriormente colaboró durante{" "}
+                  <strong style={{ color: "var(--color-text)" }}>14 años</strong> en la transformación de
+                  los estándares de Meliá Hotels y asesoró múltiples complejos turísticos en Baleares y la
+                  Península.
+                </p>
+                <p className="about-bio">
+                  Su enfoque va más allá de la gestión: ayuda a empresarios a recuperar el equilibrio
+                  personal y profesional mediante metodologías que optimizan equipos, procesos y liderazgo.
+                  Su compromiso social también lo ha llevado a colaborar con centros de desarrollo personal,
+                  impulsando el cambio a través de hábitos saludables y ejercicio físico.
                 </p>
 
                 <div className="about-highlights">
                   <div className="highlight-item">
                     <div className="highlight-icon">🏗️</div>
-                    <div className="highlight-text">Experto en sector construcción e instalaciones</div>
+                    <div className="highlight-text">Fundador de J.S.T. Instalaciones · +450 proyectos</div>
                   </div>
                   <div className="highlight-item">
                     <div className="highlight-icon">🏨</div>
@@ -414,6 +433,89 @@ export default function Home() {
                   <p className="audience-card-text">{card.text}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ══ BRANDS ════════════════════════════════════════ */}
+        <section id="brands" aria-label="Empresas y colaboraciones">
+          <div className="container">
+            <div className="brands-header">
+              <div className="section-label" style={{ justifyContent: "center" }}>Trayectoria & Empresas</div>
+              <p className="brands-subtitle">
+                Empresas fundadas, marcas asesoradas y colaboraciones a lo largo de 25+ años
+              </p>
+            </div>
+            <div className="brands-grid">
+              <div className="brand-card">
+                <img src={LUXINPRO} alt="Luxinpro" className="brand-logo" />
+                <p className="brand-desc">Empresa de instalaciones y servicios técnicos fundada por José Taura</p>
+              </div>
+              <div className="brand-card">
+                <div className="brand-text-logo">Meliá Hotels</div>
+                <p className="brand-desc">14 años transformando estándares operativos en toda España</p>
+              </div>
+              <div className="brand-card">
+                <div className="brand-text-logo">J.S.T. Instalaciones</div>
+                <p className="brand-desc">Empresa fundada por José · Más de 450 viviendas ejecutadas simultáneamente</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ══ EVENTS ════════════════════════════════════════ */}
+        <section id="eventos" aria-labelledby="eventos-title">
+          <div className="container">
+            <div className="events-header">
+              <div className="section-label" style={{ justifyContent: "center" }}>Actividades & Eventos</div>
+              <h2 className="events-title" id="eventos-title">
+                Más allá del negocio
+              </h2>
+              <div className="divider" />
+              <p style={{ color: "var(--color-text-muted)", maxWidth: "550px", margin: "0 auto 3rem", fontSize: "var(--text-base)", lineHeight: 1.7 }}>
+                José también organiza y patrocina eventos que combinan su pasión por el deporte,
+                la aventura y el desarrollo personal en Menorca y Baleares.
+              </p>
+            </div>
+            <div className="events-grid">
+              <a
+                href="https://motonauticamenorca.com"
+                target="_blank" rel="noopener noreferrer"
+                className="event-card magnetic"
+                aria-label="Motonautica Menorca - evento organizado por José Taura"
+              >
+                <div className="event-icon">🚤</div>
+                <h3 className="event-title">Motonautica Menorca</h3>
+                <p className="event-text">
+                  Organización y patrocinio de eventos de motonautica en las aguas de Menorca.
+                  Deporte, aventura y networking para empresarios.
+                </p>
+                <span className="event-link">motonauticamenorca.com →</span>
+              </a>
+              <div className="event-card">
+                <div className="event-icon">🏋️</div>
+                <h3 className="event-title">Desarrollo Personal & Deporte</h3>
+                <p className="event-text">
+                  Colaboración con centros de desarrollo personal para impulsar el cambio mediante
+                  hábitos saludables, ejercicio físico y trabajo mental.
+                </p>
+                <span className="event-link" style={{ color: "var(--color-text-muted)" }}>Menorca · Islas Baleares</span>
+              </div>
+              <div className="event-card">
+                <div className="event-icon">🎯</div>
+                <h3 className="event-title">Talleres Empresariales</h3>
+                <p className="event-text">
+                  Workshops y jornadas de formación para directivos y emprendedores sobre
+                  gestión de equipos, liderazgo y optimización de procesos.
+                </p>
+                <a
+                  href={WA_BASE + "Me%20interesa%20asistir%20a%20un%20taller%20empresarial"}
+                  target="_blank" rel="noopener noreferrer"
+                  className="event-link"
+                >
+                  Consultar próximas fechas →
+                </a>
+              </div>
             </div>
           </div>
         </section>
