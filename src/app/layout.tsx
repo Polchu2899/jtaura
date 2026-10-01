@@ -68,6 +68,19 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
+        {/* Google tag (gtag.js) — Google Analytics G-N36FGSVNFK */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-N36FGSVNFK"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-N36FGSVNFK');
+          `}
+        </Script>
         {children}
         {/* Load CDN scripts in dependency order — GSAP first, then plugins, then Lenis, then main.js */}
         <Script
